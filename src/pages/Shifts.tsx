@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../state/auth';
 import { Glass, Pill } from '../components/Glass';
 import Header from '../components/Header';
+import AvailabilityRow from '../components/AvailabilityRow';
 import { fmtDate, fmtTime, fmtNumber, fmtPct } from '../lib/format';
 import type { Shift } from '../lib/types';
 import { IconCalendarEvent, IconClock, IconPhoneCall } from '@tabler/icons-react';
@@ -31,6 +32,8 @@ export default function Shifts() {
   return (
     <div className="space-y-4 pb-6">
       <Header title="Shifts" subtitle="Your schedule and history" />
+
+      <AvailabilityRow />
 
       <div className="glass rounded-2xl p-1 flex">
         {(['upcoming', 'past'] as const).map((t) => (
