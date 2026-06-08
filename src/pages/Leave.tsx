@@ -20,6 +20,81 @@ const STATUS_META: Record<StatusGroup, { label: string; tone: 'warn' | 'ok' | 'b
   rejected:  { label: 'Rejected',  tone: 'bad',  icon: IconCircleX },
 };
 
+async function sendLeaveEmail(p: {
+  fullName: string; employeeEmail: string; role: string; region: string;
+  from: string; to: string; hours: number; type: LeaveType; reason: string; createdAt: number;
+}) {
+  const fmtDate = (d: string) => new Date(d).toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const sameDay = p.from === p.to;
+  const dateLabel = sameDay ? fmtDate(p.from) : `${fmtDate(p.from)} → ${fmtDate(p.to)}`;
+  const typeColor = p.type === 'Paid' ? '#10b981' : '#f59e0b';
+  const submittedAt = new Date(p.createdAt).toLocaleString('en-AU', { dateStyle: 'medium', timeStyle: 'short' });
+
+  const html = `<!doctype html>
+<html><body style="margin:0;padding:0;background:#f4f4f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#18181b">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f7;padding:32px 16px">
+    <tr><td align="center">
+      <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px -8px rgba(0,0,0,0.1)">
+        <tr><td style="background:linear-gradient(135deg,#6366f1,#4f46e5);padding:28px 32px;color:#fff">
+          <div style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;margin-bottom:6px">Meson Agency · Leave request</div>
+          <h1 style="margin:0;font-size:22px;font-weight:600;line-height:1.3">${p.fullName} has requested leave</h1>
+          <div style="margin-top:8px;display:inline-block;background:rgba(255,255,255,0.18);padding:6px 12px;border-radius:999px;font-size:12px;letter-spacing:.04em">${p.type.toUpperCase()} · ${p.hours}h</div>
+        </td></tr>
+        <tr><td style="padding:28px 32px 8px">
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.55;color:#3f3f46">A new leave request was just submitted in the caller team app. Status is currently <strong style="color:#a16207">Requested</strong> — please review and approve or reject in the team management tool.</p>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e4e4e7;border-radius:12px;margin:8px 0 8px">
+            <tr><td style="padding:14px 16px;border-bottom:1px solid #e4e4e7"><div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#71717a;margin-bottom:4px">Caller</div><div style="font-size:14px;font-weight:500">${p.fullName}</div><div style="font-size:13px;color:#71717a">${p.employeeEmail}${p.role ? ' · ' + p.role : ''}${p.region ? ' · ' + p.region : ''}</div></td></tr>
+            <tr><td style="padding:14px 16px;border-bottom:1px solid #e4e4e7"><div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#71717a;margin-bottom:4px">Dates</div><div style="font-size:14px;font-weight:500">${dateLabel}</div></td></tr>
+            <tr><td style="padding:14px 16px;border-bottom:1px solid #e4e4e7"><div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#71717a;margin-bottom:4px">Total hours</div><div style="font-size:14px;font-weight:500">${p.hours} hours</div></td></tr>
+            <tr><td style="padding:14px 16px;border-bottom:1px solid #e4e4e7"><div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#71717a;margin-bottom:4px">Type</div><div style="font-size:14px;font-weight:600;color:${typeColor}">${p.type}</div></td></tr>
+            <tr><td style="padding:14px 16px"><div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#71717a;margin-bottom:6px">Reason</div><div style="font-size:14px;line-height:1.55;color:#27272a;white-space:pre-wrap">${escapeHtml(p.reason)}</div></td></tr>
+          </table>
+          <p style="margin:16px 0 4px;font-size:12px;color:#71717a">Submitted ${submittedAt}</p>
+        </td></tr>
+        <tr><td style="padding:8px 32px 24px">
+          <div style="font-size:12px;color:#a1a1aa">A copy has been sent to ${escapeHtml(p.employeeEmail)} for their records. Sent automatically by the Meson Caller Team app.</div>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>`;
+
+  await supabase.functions.invoke('send-email', {
+    body: {
+      to: 'hr@mesonagency.com',
+      cc: ['john@mesonagency.com', 'savvina@mesonagency.com', p.employeeEmail],
+      subject: `Leave request — ${p.fullName} · ${p.hours}h ${p.type}`,
+      html,
+    },
+  });
+}
+
+function escapeHtml(s: string) {
+  return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
+}
+
+async function notifyKieran(p: { leaveId?: string; fullName: string; from: string; to: string; hours: number; type: LeaveType }) {
+  const { data: kieran } = await supabase
+    .from('employees')
+    .select('id')
+    .ilike('first_name', 'kieran')
+    .ilike('last_name', 'McComb')
+    .maybeSingle();
+  if (!kieran?.id) return;
+  const sameDay = p.from === p.to;
+  const fmt = (d: string) => new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
+  const dates = sameDay ? fmt(p.from) : `${fmt(p.from)}–${fmt(p.to)}`;
+  await supabase.from('notifications').insert({
+    employees_id: kieran.id,
+    title: `Leave request from ${p.fullName}`,
+    description: `${p.type} · ${p.hours}h · ${dates}`,
+    type: 'leave_request',
+    recource_type: 'leave_request',
+    recource_id: p.leaveId ?? '',
+    seen: false,
+  });
+}
+
 const normalize = (s: string): StatusGroup => {
   const x = s?.toLowerCase() ?? '';
   if (x === 'approved') return 'approved';
@@ -64,7 +139,7 @@ export default function Leave() {
       return;
     }
     setSubmitting(true);
-    const { error } = await supabase.from('leave_requests').insert({
+    const payload = {
       employee_id: employee?.id,
       date_from: from,
       date_to: to,
@@ -72,9 +147,31 @@ export default function Leave() {
       status: 'requested',
       type,
       reason: reason.trim(),
-    });
+    };
+    const { data: inserted, error } = await supabase
+      .from('leave_requests')
+      .insert(payload)
+      .select()
+      .single();
+    if (error) { setSubmitting(false); setErr(error.message); return; }
+
+    // Fire-and-forget side effects — don't block the user on transport errors
+    sendLeaveEmail({
+      fullName: `${employee!.first_name} ${employee!.last_name}`.trim(),
+      employeeEmail: employee!.email,
+      role: employee!.role,
+      region,
+      from, to, hours: Number(hours), type, reason: reason.trim(),
+      createdAt: Date.now(),
+    }).catch((e) => console.error('send-email failed', e));
+
+    notifyKieran({
+      leaveId: inserted?.id,
+      fullName: `${employee!.first_name} ${employee!.last_name}`.trim(),
+      from, to, hours: Number(hours), type,
+    }).catch((e) => console.error('notify failed', e));
+
     setSubmitting(false);
-    if (error) { setErr(error.message); return; }
     setShowForm(false);
     setFrom(''); setTo(''); setHours('8'); setReason(''); setType('Paid');
     setTab('requested');
