@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+    background: #0a0a0c;
+    color: #f5f5f7;
+  }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(60% 40% at 50% 0%, rgba(99,102,241,0.10) 0%, transparent 60%),
+      radial-gradient(40% 30% at 100% 100%, rgba(129,140,248,0.06) 0%, transparent 70%);
+    background-attachment: fixed;
+  }
+  ::selection { background: rgba(99,102,241,0.3); }
+}
+
+@layer components {
+  .glass {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.04) inset,
+      0 8px 24px -8px rgba(0,0,0,0.6),
+      0 24px 48px -24px rgba(0,0,0,0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .glass-strong {
+    background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .num { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+  .pill { @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium; }
+  .btn { @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm transition; }
+  .btn-primary { background: linear-gradient(180deg, #6366f1, #4f46e5); box-shadow: 0 0 0 1px rgba(99,102,241,0.5), 0 12px 32px -12px rgba(99,102,241,0.6); }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-ghost { @apply bg-white/5 border border-white/10 hover:bg-white/10; }
+  .input {
+    @apply w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm
+           placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/40 transition;
+  }
+}
+
+.scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+.safe-top { padding-top: env(safe-area-inset-top); }
