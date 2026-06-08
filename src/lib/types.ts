@@ -8,7 +8,6 @@ export interface Employee {
   profile_pic: { url?: string } | null;
   supabase_uid: string | null;
   active_pay_rate_per_hour: number | null;
-  caller_team_id?: string | null;
 }
 
 export interface Shift {
