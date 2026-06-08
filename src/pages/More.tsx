@@ -16,15 +16,18 @@ export default function More() {
     <div className="space-y-4 pb-6">
       <Header title="More" />
 
-      <Glass className="p-4 flex items-center gap-3">
-        <div className="size-12 rounded-2xl bg-indigo-500/15 text-indigo-300 flex items-center justify-center">
-          {employee?.profile_pic?.url ? <img src={employee.profile_pic.url} alt="" className="size-12 rounded-2xl object-cover" /> : <IconUser />}
-        </div>
-        <div className="flex-1">
-          <div className="font-medium">{employee?.first_name} {employee?.last_name}</div>
-          <div className="text-xs text-zinc-500">{employee?.role} · {region}</div>
-        </div>
-      </Glass>
+      <Link to="/profile">
+        <Glass className="p-4 flex items-center gap-3 hover:bg-white/5 transition">
+          <div className="size-12 rounded-2xl bg-indigo-500/15 text-indigo-300 flex items-center justify-center overflow-hidden">
+            {employee?.profile_pic?.url ? <img src={employee.profile_pic.url} alt="" className="size-12 rounded-2xl object-cover" /> : <IconUser />}
+          </div>
+          <div className="flex-1">
+            <div className="font-medium">{employee?.first_name} {employee?.last_name}</div>
+            <div className="text-xs text-zinc-500">{employee?.role} · {region}</div>
+          </div>
+          <IconChevronRight size={16} className="text-zinc-600" />
+        </Glass>
+      </Link>
 
       <div className="space-y-2">
         {items.map((i) => (

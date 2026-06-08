@@ -14,6 +14,7 @@ import ChatRoom from './pages/ChatRoom';
 import Notifications from './pages/Notifications';
 import Calendar from './pages/Calendar';
 import Onboarding from './pages/Onboarding';
+import Profile from './pages/Profile';
 
 function Gate() {
   const { session, employee, loading } = useAuth();
@@ -48,6 +49,7 @@ function Gate() {
         <Route path="chat/:id" element={<ChatRoom />} />
         <Route path="notifications" element={<Notifications />} />
         <Route path="calendar" element={<Calendar />} />
+        <Route path="profile" element={<Profile />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
