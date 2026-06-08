@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../state/auth';
 import { Glass } from '../components/Glass';
+import Header from '../components/Header';
 import { IconUmbrellaFilled, IconFiles, IconMessages, IconLogout, IconChevronRight, IconUser } from '@tabler/icons-react';
 
 export default function More() {
@@ -13,9 +14,7 @@ export default function More() {
 
   return (
     <div className="space-y-4 pb-6">
-      <header className="pt-2">
-        <h1 className="text-2xl font-semibold">More</h1>
-      </header>
+      <Header title="More" />
 
       <Glass className="p-4 flex items-center gap-3">
         <div className="size-12 rounded-2xl bg-indigo-500/15 text-indigo-300 flex items-center justify-center">

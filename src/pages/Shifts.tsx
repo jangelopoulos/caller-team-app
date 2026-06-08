@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../state/auth';
 import { Glass, Pill } from '../components/Glass';
+import Header from '../components/Header';
 import { fmtDate, fmtTime, fmtNumber, fmtPct } from '../lib/format';
 import type { Shift } from '../lib/types';
 import { IconCalendarEvent, IconClock, IconPhoneCall } from '@tabler/icons-react';
@@ -29,10 +30,7 @@ export default function Shifts() {
 
   return (
     <div className="space-y-4 pb-6">
-      <header className="pt-2">
-        <h1 className="text-2xl font-semibold">Shifts</h1>
-        <p className="text-zinc-500 text-sm">Your schedule and history</p>
-      </header>
+      <Header title="Shifts" subtitle="Your schedule and history" />
 
       <div className="glass rounded-2xl p-1 flex">
         {(['upcoming', 'past'] as const).map((t) => (

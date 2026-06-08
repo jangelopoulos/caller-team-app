@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../state/auth';
 import { Glass, Stat } from '../components/Glass';
+import Header from '../components/Header';
 import { fmtNumber, fmtPct, BENCHMARKS } from '../lib/format';
 import { LineChart, Line, BarChart, Bar, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid, ReferenceLine } from 'recharts';
 import { IconTrendingUp } from '@tabler/icons-react';
@@ -59,19 +60,14 @@ export default function Performance() {
 
   return (
     <div className="space-y-4 pb-6">
-      <header className="pt-2 flex items-end justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">Performance</h1>
-          <p className="text-zinc-500 text-sm">Trends vs Meson benchmarks</p>
-        </div>
-        <div className="glass rounded-xl p-0.5 flex text-xs">
-          {([7, 30] as const).map((r) => (
-            <button key={r} onClick={() => setRange(r)} className={`px-3 py-1.5 rounded-lg ${range === r ? 'bg-white/10' : 'text-zinc-500'}`}>
-              {r}d
-            </button>
-          ))}
-        </div>
-      </header>
+      <Header title="Performance" subtitle="Trends vs Meson benchmarks" />
+      <div className="glass rounded-xl p-0.5 flex text-xs w-fit ml-auto">
+        {([7, 30] as const).map((r) => (
+          <button key={r} onClick={() => setRange(r)} className={`px-3 py-1.5 rounded-lg ${range === r ? 'bg-white/10' : 'text-zinc-500'}`}>
+            {r}d
+          </button>
+        ))}
+      </div>
 
       <div className="grid grid-cols-2 gap-3">
         <Stat

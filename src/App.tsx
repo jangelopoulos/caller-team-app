@@ -11,6 +11,8 @@ import Leave from './pages/Leave';
 import Documents from './pages/Documents';
 import ChatList from './pages/Chat';
 import ChatRoom from './pages/ChatRoom';
+import Notifications from './pages/Notifications';
+import Calendar from './pages/Calendar';
 
 function Gate() {
   const { session, employee, loading } = useAuth();
@@ -42,6 +44,8 @@ function Gate() {
         <Route path="documents" element={<Documents />} />
         <Route path="chat" element={<ChatList />} />
         <Route path="chat/:id" element={<ChatRoom />} />
+        <Route path="notifications" element={<Notifications />} />
+        <Route path="calendar" element={<Calendar />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

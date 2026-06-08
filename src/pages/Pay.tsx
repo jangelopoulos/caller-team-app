@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../state/auth';
 import { Glass, Pill } from '../components/Glass';
+import Header from '../components/Header';
 import { fmtMoney, fmtNumber } from '../lib/format';
 import type { PayRun } from '../lib/types';
 import { IconReceipt2 } from '@tabler/icons-react';
@@ -24,10 +25,7 @@ export default function Pay() {
 
   return (
     <div className="space-y-4 pb-6">
-      <header className="pt-2">
-        <h1 className="text-2xl font-semibold">Pay runs</h1>
-        <p className="text-zinc-500 text-sm">Your payslip history</p>
-      </header>
+      <Header title="Pay runs" subtitle="Your payslip history" />
 
       {runs.length === 0 && (
         <Glass className="p-8 text-center">

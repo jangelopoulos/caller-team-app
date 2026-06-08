@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../state/auth';
 import { Glass, Stat, Pill } from '../components/Glass';
+import Header from '../components/Header';
 import { fmtDate, fmtTime, fmtNumber, fmtPct, BENCHMARKS } from '../lib/format';
 import type { Shift } from '../lib/types';
 import { IconCalendarTime, IconArrowRight, IconChartLine, IconPhoneCall, IconActivityHeartbeat } from '@tabler/icons-react';
@@ -74,10 +75,7 @@ export default function Home() {
 
   return (
     <div className="space-y-5 pb-6">
-      <div className="pt-2">
-        <div className="text-zinc-500 text-sm">{greet()},</div>
-        <h1 className="text-2xl font-semibold">{employee?.first_name ?? '—'}</h1>
-      </div>
+      <Header title={employee?.first_name ?? '—'} subtitle={`${greet()},`} />
 
       <Glass className="p-5 relative overflow-hidden">
         <div className="absolute -top-12 -right-12 size-40 rounded-full bg-indigo-500/20 blur-3xl" />
