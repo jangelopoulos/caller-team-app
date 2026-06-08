@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../state/auth';
 import { Glass } from '../components/Glass';
 import Header from '../components/Header';
-import { IconUmbrellaFilled, IconFiles, IconMessages, IconLogout, IconChevronRight, IconUser } from '@tabler/icons-react';
+import { IconUmbrellaFilled, IconFiles, IconMessages, IconLogout, IconChevronRight, IconUser, IconLock, IconCalendar } from '@tabler/icons-react';
 
 export default function More() {
   const { employee, signOut, region } = useAuth();
@@ -10,7 +10,8 @@ export default function More() {
     { to: '/leave', label: 'Request leave', sub: 'Submit & track', icon: IconUmbrellaFilled, tint: 'bg-amber-500/15 text-amber-300' },
     { to: '/documents', label: 'HR documents', sub: 'Policies & forms', icon: IconFiles, tint: 'bg-cyan-500/15 text-cyan-300' },
     { to: '/chat', label: 'Team chat', sub: 'Channels & DMs', icon: IconMessages, tint: 'bg-fuchsia-500/15 text-fuchsia-300' },
-    { to: '/calendar', label: 'Calendar', sub: 'Month view of shifts', icon: IconUser, tint: 'bg-emerald-500/15 text-emerald-300' },
+    { to: '/calendar', label: 'Calendar', sub: 'Month view of shifts', icon: IconCalendar, tint: 'bg-emerald-500/15 text-emerald-300' },
+    { to: '/change-password', label: 'Change password', sub: 'Update your sign-in password', icon: IconLock, tint: 'bg-violet-500/15 text-violet-300' },
   ];
 
   return (
