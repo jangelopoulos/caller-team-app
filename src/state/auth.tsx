@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadEmployee = async (uid: string) => {
     const { data } = await supabase
       .from('employees')
-      .select('id, first_name, last_name, email, role, "Country", profile_pic, supabase_uid, active_pay_rate_per_hour')
+      .select('id, first_name, last_name, email, role, "Country", profile_pic, supabase_uid, active_pay_rate_per_hour, onboarding_completed, phone, birthday, gender, bio, emergency_contact_name, emergency_contact_info, allergies_or_illness, account_name, bsb, account_number, super_fund, super_number, employment_status')
       .eq('supabase_uid', uid)
       .maybeSingle();
     if (data) setEmployee(data as Employee);

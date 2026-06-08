@@ -13,6 +13,7 @@ import ChatList from './pages/Chat';
 import ChatRoom from './pages/ChatRoom';
 import Notifications from './pages/Notifications';
 import Calendar from './pages/Calendar';
+import Onboarding from './pages/Onboarding';
 
 function Gate() {
   const { session, employee, loading } = useAuth();
@@ -24,6 +25,7 @@ function Gate() {
     );
   }
   if (!session) return <Login />;
+  if (employee && employee.onboarding_completed === false) return <Onboarding />;
   if (!employee) {
     return (
       <div className="min-h-full flex flex-col items-center justify-center px-6 text-center">
