@@ -78,9 +78,11 @@ export default function Onboarding() {
     setErr(null);
     setUploading(true);
     try {
-      const ext = (file.name.split('.').pop() ?? 'jpg').toLowerCase();
-      const path = `onboarding/${employee.id}-${Date.now()}.${ext}`;
-      const { error } = await supabase.storage.from('avatars').upload(path, file, { upsert: true, contentType: file.type });
+      const processed = await resizeImage(file, 1024, 0.85);
+      const path = `onboarding/${employee.id}-${Date.now()}.jpg`;
+      const { error } = await supabase.storage
+        .from('avatars')
+        .upload(path, processed, { upsert: true, contentType: 'image/jpeg' });
       if (error) throw error;
       const { data } = supabase.storage.from('avatars').getPublicUrl(path);
       setProfilePicUrl(data.publicUrl);
@@ -399,6 +401,34 @@ export default function Onboarding() {
       </div>
     </div>
   );
+}
+
+async function resizeImage(file: File, maxEdge: number, quality: number): Promise<Blob> {
+  const bitmap = await createImageBitmap(file).catch(async () => {
+    // Fallback via HTMLImageElement (older browsers / HEIC)
+    const url = URL.createObjectURL(file);
+    const img = await new Promise<HTMLImageElement>((res, rej) => {
+      const i = new Image();
+      i.onload = () => res(i);
+      i.onerror = rej;
+      i.src = url;
+    });
+    URL.revokeObjectURL(url);
+    return img as unknown as ImageBitmap;
+  });
+  const w = (bitmap as any).width as number;
+  const h = (bitmap as any).height as number;
+  const scale = Math.min(1, maxEdge / Math.max(w, h));
+  const tw = Math.round(w * scale);
+  const th = Math.round(h * scale);
+  const canvas = document.createElement('canvas');
+  canvas.width = tw; canvas.height = th;
+  const ctx = canvas.getContext('2d')!;
+  ctx.drawImage(bitmap as CanvasImageSource, 0, 0, tw, th);
+  const blob: Blob = await new Promise((res, rej) =>
+    canvas.toBlob((b) => (b ? res(b) : rej(new Error('toBlob failed'))), 'image/jpeg', quality)
+  );
+  return blob;
 }
 
 function ReadField({ label, value }: { label: string; value: string }) {
