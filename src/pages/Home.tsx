@@ -81,7 +81,8 @@ export default function Home() {
       <AvailabilityRow />
 
       <Glass className="p-5 relative overflow-hidden">
-        <div className="absolute -top-12 -right-12 size-40 rounded-full bg-indigo-500/20 blur-3xl" />
+        <div className="absolute -top-12 -right-12 size-40 rounded-full bg-indigo-500/30 blur-3xl" />
+        <div className="absolute -bottom-16 -left-12 size-40 rounded-full bg-fuchsia-500/20 blur-3xl" />
         <div className="flex items-center justify-between mb-3 relative">
           <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-zinc-400">
             <IconCalendarTime size={14} /> Next Shift
@@ -106,14 +107,15 @@ export default function Home() {
 
       <div className="grid grid-cols-2 gap-3">
         <Stat
+          tint="indigo"
           label="OPH today"
           value={today.oph != null ? fmtNumber(today.oph, 1) : '—'}
           sub={`Bench ${bench}`}
           accent={ophAccent as any}
         />
-        <Stat label="Connect rate" value={today.cr != null ? fmtPct(today.cr) : '—'} sub="Today" />
-        <Stat label="Calls today" value={<><IconPhoneCall size={14} className="inline mr-1 -mt-0.5 text-zinc-500" />{today.calls}</>} />
-        <Stat label="Calls (7d)" value={week.calls} sub={week.oph != null ? `Avg OPH ${fmtNumber(week.oph, 1)}` : undefined} />
+        <Stat tint="emerald" label="Connect rate" value={today.cr != null ? fmtPct(today.cr) : '—'} sub="Today" />
+        <Stat tint="amber" label="Calls today" value={<><IconPhoneCall size={14} className="inline mr-1 -mt-0.5 text-amber-300/70" />{today.calls}</>} />
+        <Stat tint="cyan" label="Calls (7d)" value={week.calls} sub={week.oph != null ? `Avg OPH ${fmtNumber(week.oph, 1)}` : undefined} />
       </div>
 
       <div className="grid grid-cols-2 gap-3">

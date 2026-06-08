@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { IconBell, IconCalendarMonth, IconMessageCircle2, IconPointFilled } from '@tabler/icons-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../state/auth';
-import { Glass } from './Glass';
 
 interface Notif {
   id: string;
@@ -125,7 +124,7 @@ export default function Header({ title, subtitle }: { title: string; subtitle?: 
           </button>
           {open && (
             <div className="absolute right-0 top-12 w-[320px] z-50">
-              <Glass strong className="overflow-hidden">
+              <div className="glass-solid rounded-2xl overflow-hidden">
                 <div className="px-4 py-3 flex items-center justify-between border-b border-white/5">
                   <div className="text-sm font-semibold">Notifications</div>
                   {unread > 0 && <div className="num text-[10px] text-indigo-300">{unread} new</div>}
@@ -160,7 +159,7 @@ export default function Header({ title, subtitle }: { title: string; subtitle?: 
                 >
                   See all
                 </Link>
-              </Glass>
+              </div>
             </div>
           )}
         </div>

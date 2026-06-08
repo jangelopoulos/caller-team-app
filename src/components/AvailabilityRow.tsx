@@ -126,7 +126,7 @@ function EditSheet({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-3 bg-black/60 backdrop-blur-sm" onClick={onClose}>
-      <Glass strong className="w-full max-w-md p-5 space-y-4" onClick={(e) => e.stopPropagation()}>
+      <div className="glass-solid rounded-2xl w-full max-w-md p-5 space-y-4" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between">
           <div>
             <div className="text-[11px] uppercase tracking-wider text-zinc-500">Availability</div>
@@ -195,7 +195,7 @@ function EditSheet({
             <IconCheck size={14} /> {saving ? 'Saving…' : current ? 'Update' : 'Add availability'}
           </button>
         </div>
-      </Glass>
+      </div>
     </div>
   );
 }

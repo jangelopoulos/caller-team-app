@@ -55,7 +55,7 @@ export default function Pay() {
 
       {selected && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-3 bg-black/60 backdrop-blur-sm" onClick={() => setSelected(null)}>
-          <Glass strong className="w-full max-w-md p-5 space-y-3" onClick={(e) => e.stopPropagation()}>
+          <div className="glass-solid rounded-2xl w-full max-w-md p-5 space-y-3" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between">
               <div className="text-sm text-zinc-400">Payslip</div>
               <Pill tone="ok">Paid</Pill>
@@ -84,7 +84,7 @@ export default function Pay() {
               </div>
             </div>
             <button onClick={() => setSelected(null)} className="btn btn-ghost w-full mt-2">Close</button>
-          </Glass>
+          </div>
         </div>
       )}
     </div>

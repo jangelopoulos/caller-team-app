@@ -7,9 +7,10 @@ import { IconUmbrellaFilled, IconFiles, IconMessages, IconLogout, IconChevronRig
 export default function More() {
   const { employee, signOut, region } = useAuth();
   const items = [
-    { to: '/leave', label: 'Request leave', sub: 'Submit & track', icon: IconUmbrellaFilled },
-    { to: '/documents', label: 'HR documents', sub: 'Policies & forms', icon: IconFiles },
-    { to: '/chat', label: 'Team chat', sub: 'Channels & DMs', icon: IconMessages },
+    { to: '/leave', label: 'Request leave', sub: 'Submit & track', icon: IconUmbrellaFilled, tint: 'bg-amber-500/15 text-amber-300' },
+    { to: '/documents', label: 'HR documents', sub: 'Policies & forms', icon: IconFiles, tint: 'bg-cyan-500/15 text-cyan-300' },
+    { to: '/chat', label: 'Team chat', sub: 'Channels & DMs', icon: IconMessages, tint: 'bg-fuchsia-500/15 text-fuchsia-300' },
+    { to: '/calendar', label: 'Calendar', sub: 'Month view of shifts', icon: IconUser, tint: 'bg-emerald-500/15 text-emerald-300' },
   ];
 
   return (
@@ -33,7 +34,7 @@ export default function More() {
         {items.map((i) => (
           <Link key={i.to} to={i.to}>
             <Glass className="p-4 flex items-center gap-3 hover:bg-white/5 transition">
-              <div className="size-10 rounded-xl bg-white/5 text-indigo-300 flex items-center justify-center">
+              <div className={`size-10 rounded-xl flex items-center justify-center ${i.tint}`}>
                 <i.icon size={18} stroke={1.6} />
               </div>
               <div className="flex-1">

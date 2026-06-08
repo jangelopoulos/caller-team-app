@@ -71,14 +71,15 @@ export default function Performance() {
 
       <div className="grid grid-cols-2 gap-3">
         <Stat
+          tint="indigo"
           label="Avg OPH"
           value={fmtNumber(totals.oph, 1)}
           sub={`Bench ${BENCHMARKS.Manual}`}
           accent={totals.oph >= BENCHMARKS.Manual ? 'ok' : totals.oph >= BENCHMARKS.Manual * 0.85 ? 'warn' : 'bad'}
         />
-        <Stat label="Connect rate" value={fmtPct(totals.cr)} />
-        <Stat label="Total calls" value={totals.calls} />
-        <Stat label="Hours worked" value={fmtNumber(totals.hours, 1)} />
+        <Stat tint="emerald" label="Connect rate" value={fmtPct(totals.cr)} />
+        <Stat tint="fuchsia" label="Total calls" value={totals.calls} />
+        <Stat tint="cyan" label="Hours worked" value={fmtNumber(totals.hours, 1)} />
       </div>
 
       <Glass className="p-4">
@@ -130,13 +131,20 @@ export default function Performance() {
       <Glass className="p-4">
         <div className="text-sm font-medium mb-2">Meson benchmarks</div>
         <div className="grid grid-cols-3 gap-2 text-center">
-          {Object.entries(BENCHMARKS).map(([k, v]) => (
-            <div key={k} className="rounded-xl bg-white/5 p-3">
-              <div className="text-[10px] uppercase tracking-wider text-zinc-500">{k}</div>
-              <div className="num text-xl font-semibold mt-1">{v}</div>
-              <div className="text-[10px] text-zinc-500">OPH target</div>
-            </div>
-          ))}
+          {(['Manual', 'Autodial', 'EasyAML'] as const).map((k, i) => {
+            const tints = [
+              { bg: 'from-indigo-500/20 to-indigo-500/5', ring: 'ring-indigo-400/30', text: 'text-indigo-200' },
+              { bg: 'from-fuchsia-500/20 to-fuchsia-500/5', ring: 'ring-fuchsia-400/30', text: 'text-fuchsia-200' },
+              { bg: 'from-cyan-500/20 to-cyan-500/5', ring: 'ring-cyan-400/30', text: 'text-cyan-200' },
+            ][i];
+            return (
+              <div key={k} className={`rounded-xl bg-gradient-to-br ${tints.bg} ring-1 ${tints.ring} p-3`}>
+                <div className={`text-[10px] uppercase tracking-wider ${tints.text}`}>{k}</div>
+                <div className="num text-xl font-semibold mt-1">{BENCHMARKS[k]}</div>
+                <div className="text-[10px] text-zinc-500">OPH target</div>
+              </div>
+            );
+          })}
         </div>
       </Glass>
     </div>
