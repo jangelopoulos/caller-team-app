@@ -73,6 +73,10 @@ export interface LeaveRequest {
   date_to: string | null;
   total_hours: number;
   status: string;
+  reason?: string;
+  type?: string;
+  approved_by?: string | null;
+  approved_date?: string | null;
 }
 
 export interface Chat {
